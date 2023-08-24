@@ -1,14 +1,13 @@
 package com.teamsupercat.roupangbackend.service;
 
 import com.teamsupercat.roupangbackend.common.CustomException;
-import com.teamsupercat.roupangbackend.common.dynamicMessageException.CustomMessageException;
 import com.teamsupercat.roupangbackend.common.ErrorCode;
+import com.teamsupercat.roupangbackend.common.dynamicMessageException.CustomMessageException;
 import com.teamsupercat.roupangbackend.dto.cart.request.CartChangeRequest;
 import com.teamsupercat.roupangbackend.dto.cart.request.RemoveCartRequest;
 import com.teamsupercat.roupangbackend.dto.cart.response.CartAllResponse;
 import com.teamsupercat.roupangbackend.entity.Cart;
 import com.teamsupercat.roupangbackend.entity.Member;
-import com.teamsupercat.roupangbackend.entity.OptionDetail;
 import com.teamsupercat.roupangbackend.entity.Product;
 import com.teamsupercat.roupangbackend.repository.CartRepository;
 import com.teamsupercat.roupangbackend.repository.OptionDetailRepository;
@@ -48,13 +47,13 @@ public class CartService {
         Optional<Cart> optionalCart = cartRepository.findByMemberIdAndProductId(member.getId(), cartChangeRequest.getProductIdx());
 
         // Request -> Entity 형변환
-        Cart saveToEntity = cartChangeRequest.saveToEntity(member, product);
+        Cart saveToEntity = cartChangeRequest.saveToEntity(member, product, cartChangeRequest);
 
-        // 기존 상품이 없다면 신규생성, 기존 상품이 있다면 구매수량 수정
+        // 기존 상품이 없다면 신규생성, 기존 상품이 있다면 구매수량 추가
         if (optionalCart.isPresent()) {
             saveToEntity.setId(optionalCart.get().getId());
-            saveToEntity.setAmount(cartChangeRequest.getAmount());
-            saveToEntity.setOptionDetail(cartChangeRequest.getOptionDetail().toString());
+            saveToEntity.setAmount(optionalCart.get().getAmount() + cartChangeRequest.getAmount());
+            saveToEntity.setOptionDetail(cartChangeRequest.getOptionDetail());
         }
         // 저장 및 수정
         cartRepository.save(saveToEntity);

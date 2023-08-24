@@ -17,11 +17,11 @@ public class CartChangeRequest {
     private Integer amount;
     private String optionDetail;
 
-    public Cart saveToEntity(Member member, Product byproduct) {
+    public Cart saveToEntity(Member member, Product byproduct, CartChangeRequest cartChangeRequest) {
         return Cart.builder()
                 .memberIdx(member)
                 .productIdx(byproduct)
-                .amount(amount)
+                .amount(cartChangeRequest.getAmount())
                 .createdAt(Instant.now())
                 .isDeleted(false)
                 .optionDetail(getOptionDetail())
