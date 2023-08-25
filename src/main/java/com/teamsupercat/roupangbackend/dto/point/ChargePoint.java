@@ -16,13 +16,10 @@ public class ChargePoint {
     @AllArgsConstructor
     public static class Request {
 
-        @JsonProperty("충전포인트")
         private Long chargePoint;
 
-        @JsonProperty("결제 금액")
         private Long transactionAmount;
-
-        @JsonProperty("결제수단 번호")
+        
         private Integer paymentMethodIdx;
 
     }
